@@ -1,4 +1,4 @@
-# MCP Inspector Tutorial
+# MCP Inspector Tutorial (work in Progress)
 
 ## Table of Contents
 
