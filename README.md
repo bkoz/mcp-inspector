@@ -1,7 +1,5 @@
 # MCP Inspector Tutorial
 
-A comprehensive tutorial on building and inspecting Model Context Protocol (MCP) servers using the MCP Inspector.
-
 ## Table of Contents
 
 - [Overview](#overview)
@@ -25,29 +23,28 @@ A comprehensive tutorial on building and inspecting Model Context Protocol (MCP)
 
 ## Overview
 
-This tutorial demonstrates how to create a basic MCP (Model Context Protocol) server that can be inspected and tested using MCP Inspector tools. You'll learn how to:
+Model Context Protocol (MCP) is a protocol that enables AI applications to interact with external tools and data sources in a standardized way.
 
-- Set up an MCP server using the official SDK
-- Define and implement tools
-- Test your server using MCP Inspector
-- Add custom functionality to your server
+This tutorial provides an introduction to using the MCP Inspector. You'll learn:
+
+- What is the Inspector and why is it useful.
+- How to use it to test and verify a simple server.
 
 ## What is MCP Inspector?
 
 MCP Inspector is a developer tool for testing and debugging MCP servers. It allows you to:
 
-- Connect to MCP servers running locally
-- Inspect available tools, resources, and prompts
+- Connect to MCP servers running locally or remotely
+- Inspect available tools, resources, and prompts that a server supports
 - Test tool invocations interactively
 - Debug server responses and behavior
 
-MCP (Model Context Protocol) is a protocol that enables AI assistants to interact with external tools and data sources in a standardized way.
-
 ## Prerequisites
 
-- **Node.js**: Version 18.0.0 or higher
-- **npm**: Comes with Node.js
-- Basic knowledge of TypeScript and async/await patterns
+- **Linux or MacOS**
+  - It should run on Windows but I've not tested it.
+- **Node.js**: v24.11.1
+- **npm**: Included with Node.js
 
 ## Getting Started
 
