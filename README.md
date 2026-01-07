@@ -36,10 +36,11 @@ This tutorial provides an introduction to using the MCP Inspector. You'll learn:
 
 MCP Inspector is a developer tool for testing and debugging MCP servers. It allows you to:
 
-- Connect to MCP servers running locally or remotely
-- Inspect available tools, resources, and prompts that a server supports
-- Test tool invocations interactively
-- Debug server responses and behavior
+- Connect to MCP servers running locally or remotely.
+- Inspect available tools, resources, and prompts that a server supports.
+- Test tool invocations interactively.
+- Debug server responses and behavior.
+- It operates in both CLI and UI modes.
 
 [↑ Back to Table of Contents](#table-of-contents)
 
