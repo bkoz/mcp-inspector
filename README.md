@@ -30,6 +30,8 @@ This tutorial provides an introduction to using the MCP Inspector. You'll learn:
 - What is the Inspector and why is it useful.
 - How to use it to test and verify a simple server.
 
+[↑ Back to Table of Contents](#table-of-contents)
+
 ## What is MCP Inspector?
 
 MCP Inspector is a developer tool for testing and debugging MCP servers. It allows you to:
@@ -39,12 +41,16 @@ MCP Inspector is a developer tool for testing and debugging MCP servers. It allo
 - Test tool invocations interactively
 - Debug server responses and behavior
 
+[↑ Back to Table of Contents](#table-of-contents)
+
 ## Prerequisites
 
 - **Linux or MacOS**
   - It should run on Windows but I've not tested it.
 - **Node.js**: v24.11.1
 - **npm**: Included with Node.js
+
+[↑ Back to Table of Contents](#table-of-contents)
 
 ## Getting Started
 
@@ -78,6 +84,8 @@ node dist/index.js
 
 The server will start and listen for MCP protocol messages on stdio (standard input/output).
 
+[↑ Back to Table of Contents](#table-of-contents)
+
 ## Project Structure
 
 ```
@@ -90,6 +98,8 @@ mcp-inspector/
 ├── CLAUDE.md            # Developer guide for AI assistants
 └── README.md            # This file
 ```
+
+[↑ Back to Table of Contents](#table-of-contents)
 
 ## Understanding the Example Server
 
@@ -174,6 +184,8 @@ The handler:
 3. Executes the tool logic
 4. Returns results as content blocks
 
+[↑ Back to Table of Contents](#table-of-contents)
+
 ## Using MCP Inspector
 
 To inspect your server using the MCP Inspector:
@@ -190,6 +202,8 @@ To inspect your server using the MCP Inspector:
    - Call the "echo" tool with different messages
    - Observe request/response patterns
    - Debug any issues
+
+[↑ Back to Table of Contents](#table-of-contents)
 
 ## Adding Custom Tools
 
@@ -232,6 +246,8 @@ To add new tools to the server:
 
 3. **Rebuild and test**: Run `npm run build` and test with MCP Inspector
 
+[↑ Back to Table of Contents](#table-of-contents)
+
 ## Development Workflow
 
 For active development, use watch mode:
@@ -259,6 +275,8 @@ npm run typecheck
 npm run clean
 ```
 
+[↑ Back to Table of Contents](#table-of-contents)
+
 ## Troubleshooting
 
 ### Server won't start
@@ -275,12 +293,18 @@ npm run clean
 - Check that the server builds without errors
 - Ensure the server process isn't already running
 
+[↑ Back to Table of Contents](#table-of-contents)
+
 ## Resources
 
 - [Model Context Protocol Documentation](https://modelcontextprotocol.io)
 - [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk)
 - [MCP Inspector](https://github.com/modelcontextprotocol/inspector)
 
+[↑ Back to Table of Contents](#table-of-contents)
+
 ## License
 
 This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
+
+[↑ Back to Table of Contents](#table-of-contents)
