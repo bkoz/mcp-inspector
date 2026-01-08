@@ -5,15 +5,11 @@
 - [Overview](#overview)
 - [What is MCP Inspector?](#what-is-mcp-inspector)
 - [Prerequisites](#prerequisites)
+- [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
   - [Building the Project](#building-the-project)
   - [Running the Server](#running-the-server)
-- [Project Structure](#project-structure)
-- [Understanding the Example Server](#understanding-the-example-server)
-  - [Server Initialization](#server-initialization)
-  - [Defining Tools](#defining-tools)
-  - [Handling Tool Calls](#handling-tool-calls)
 - [Using MCP Inspector](#using-mcp-inspector)
 - [Adding Custom Tools](#adding-custom-tools)
 - [Development Workflow](#development-workflow)
@@ -48,42 +44,8 @@ MCP Inspector is a developer tool for testing and debugging MCP servers. It allo
 
 - **Linux or MacOS**
   - It should run on Windows but I've not tested it.
-- **Node.js**: v24.11.1
+- **Node.js**: tested with v25.2.1
 - **npm**: Included with Node.js
-
-[↑ Back to Table of Contents](#table-of-contents)
-
-## Getting Started
-
-### Installation
-
-Clone this repository and install dependencies:
-
-```bash
-git clone <repository-url>
-cd mcp-inspector
-npm install
-```
-
-### Building the Project
-
-Compile the TypeScript code to JavaScript:
-
-```bash
-npm run build
-```
-
-This creates a `dist/` directory with the compiled code.
-
-### Running the Server
-
-After building, run the MCP server:
-
-```bash
-node dist/index.js
-```
-
-The server will start and listen for MCP protocol messages on stdio (standard input/output).
 
 [↑ Back to Table of Contents](#table-of-contents)
 
@@ -102,150 +64,107 @@ mcp-inspector/
 
 [↑ Back to Table of Contents](#table-of-contents)
 
-## Understanding the Example Server
+## Getting Started
 
-The example server in `src/index.ts` demonstrates the core concepts of building an MCP server.
+### Installation
 
-### Server Initialization
+Clone this repository, install dependencies then build and run the sample MCP server.
 
-```typescript
-const server = new Server(
-  {
-    name: "mcp-inspector-tutorial",
-    version: "0.1.0",
-  },
-  {
-    capabilities: {
-      tools: {},
-    },
-  }
-);
+```bash
+git clone <this-repository-url>
+cd mcp-inspector
+npm install
 ```
 
-The server is created with:
-- **Metadata**: Name and version for identification
-- **Capabilities**: Declares what features the server supports (in this case, tools)
+### Building the Project
 
-### Defining Tools
+Transpile the TypeScript code to JavaScript:
 
-Tools are defined by handling the `ListToolsRequestSchema`:
-
-```typescript
-server.setRequestHandler(ListToolsRequestSchema, async () => {
-  return {
-    tools: [
-      {
-        name: "echo",
-        description: "Echoes back the provided message",
-        inputSchema: {
-          type: "object",
-          properties: {
-            message: {
-              type: "string",
-              description: "The message to echo back",
-            },
-          },
-          required: ["message"],
-        },
-      },
-    ],
-  };
-});
+```bash
+npm run build
 ```
 
-Each tool definition includes:
-- **name**: Unique identifier for the tool
-- **description**: Explains what the tool does
-- **inputSchema**: JSON Schema defining the tool's parameters
+This creates a `dist/` directory with the compiled code.
 
-### Handling Tool Calls
+### Running the Server
 
-Tool execution is handled via `CallToolRequestSchema`:
+After building, run the MCP server:
 
-```typescript
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  if (request.params.name === "echo") {
-    const message = String(request.params.arguments?.message ?? "");
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Echo: ${message}`,
-        },
-      ],
-    };
-  }
-  throw new Error(`Unknown tool: ${request.params.name}`);
-});
+```bash
+node dist/index.js
 ```
 
-The handler:
-1. Checks which tool is being called
-2. Extracts arguments from the request
-3. Executes the tool logic
-4. Returns results as content blocks
+Expected Output
+
+```console
+MCP Inspector Tutorial server running on stdio
+```
+Use **ctl-c** to kill the server.
+
+[!NOTE] This example server is written using the stdio transport which is intended for
+local development. For production scenarios the streamable-http transport should be used. SSE is a third transport that has been recently deprecated. We'll show
+how the Inspector can be used with both the stdio and streamable-http transports. 
 
 [↑ Back to Table of Contents](#table-of-contents)
 
 ## Using MCP Inspector
 
-To inspect your server using the MCP Inspector:
+The Inspector provides a CLI and a UI mode.
 
-1. **Build your server**: Run `npm run build` to compile the code
+1. Build your server:
+```bash
+npm run build
+```
 
-2. **Configure MCP Inspector**: Add your server to the inspector's configuration. The server can be invoked as:
-   ```bash
-   node /path/to/mcp-inspector/dist/index.js
-   ```
+2. Let's use the CLI mode to list the *tools* that our server provides. The Inspector plays the role of an MCP client and invokes the server as a 
+sub process to establish the stdio connection.
 
-3. **Connect and Test**: Use the MCP Inspector interface to:
-   - View available tools
-   - Call the "echo" tool with different messages
-   - Observe request/response patterns
-   - Debug any issues
+```bash
+npx @modelcontextprotocol/inspector --cli --method=tools/list -- node dist/index.js
+```
 
-[↑ Back to Table of Contents](#table-of-contents)
+```json
+{
+  "tools": [
+    {
+      "name": "echo",
+      "description": "Echoes back the provided message",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The message to echo back"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      }
+    }
+  ]
+}
+```
 
-## Adding Custom Tools
+Note that the server is advertizing a tool called *echo* that accepts
+one required argument named *message* that is a *string* type.
 
-To add new tools to the server:
+3. Now we'll test the tool's *echo* method.
+```bash
+npx @modelcontextprotocol/inspector --cli --method=tools/call --tool-name=echo --tool-arg=message=hello -- node dist/index.js
+```
 
-1. **Add the tool definition** in the `ListToolsRequestSchema` handler:
-   ```typescript
-   {
-     name: "my-tool",
-     description: "Description of what my tool does",
-     inputSchema: {
-       type: "object",
-       properties: {
-         param1: { type: "string", description: "First parameter" },
-         param2: { type: "number", description: "Second parameter" }
-       },
-       required: ["param1"]
-     }
-   }
-   ```
-
-2. **Implement the tool logic** in the `CallToolRequestSchema` handler:
-   ```typescript
-   if (request.params.name === "my-tool") {
-     const param1 = String(request.params.arguments?.param1 ?? "");
-     const param2 = Number(request.params.arguments?.param2 ?? 0);
-
-     // Your tool logic here
-
-     return {
-       content: [
-         {
-           type: "text",
-           text: `Result: ${/* your result */}`,
-         },
-       ],
-     };
-   }
-   ```
-
-3. **Rebuild and test**: Run `npm run build` and test with MCP Inspector
+Expected output
+```json
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Echo: hello"
+    }
+  ]
+}
+```
 
 [↑ Back to Table of Contents](#table-of-contents)
 
