@@ -166,6 +166,56 @@ Expected output
 }
 ```
 
+4. The [MCP project](https://github.com/modelcontextprotocol/servers/blob/main/src/everything/README.md)
+has a test server that exercises all the features of the MCP protocol. Lets use it
+to examine prompts and resources with the Inspector.
+
+```bash
+npx @modelcontextprotocol/inspector --cli --method prompts/list -- npx @modelcontextprotocol/server-everything
+```
+
+Let's call the *complex_prompt* prompt and set its arguments.
+
+```bash
+npx @modelcontextprotocol/inspector --cli --method prompts/get --prompt-name=complex_prompt --prompt-args=temperature=0.5 --prompt-args=style=casual -- npx @modelcontextprotocol/server-everything | jq .messages[0]
+```
+Expected Output
+```json
+{
+  "role": "user",
+  "content": {
+    "type": "text",
+    "text": "This is a complex prompt with arguments: temperature=0.5, style=casual"
+  }
+}
+```
+
+Let list and get some resources from the server.
+
+```bash
+npx @modelcontextprotocol/inspector --cli --method=resources/templates/list  -- npx @modelcontextprotocol/server-everything
+```
+
+```json
+{
+  "resourceTemplates": [
+    {
+      "name": "Static Resource",
+      "uriTemplate": "test://static/resource/{id}",
+      "description": "A static resource with a numeric ID"
+    }
+  ]
+}
+```
+
+```bash
+npx @modelcontextprotocol/inspector --cli --method resources/list -- npx @modelcontextprotocol/server-everything
+```
+
+```bash
+npx @modelcontextprotocol/inspector --cli --method resources/read --uri="test://static/resource/1" -- npx @modelcontextprotocol/server-everything
+```
+
 [↑ Back to Table of Contents](#table-of-contents)
 
 ## Development Workflow
